@@ -7,9 +7,14 @@ DEFAULT_TIMEOUT = 5
 
 
 class HomeAssistant(object):
-    def __init__(self, base_url, timeout=None):
+    def __init__(self, base_url, api_password=None, timeout=None):
         assert base_url[-1] != '/', 'Host should not end with a /'
         self._base_url = base_url + '/api/'
+
+        if api_password is None:
+            self._headers = None
+        else:
+            self._headers = {'X-HA-access': api_password}
 
         if timeout is None and http_client.support_timeout():
             timeout = DEFAULT_TIMEOUT
@@ -63,7 +68,9 @@ class HomeAssistant(object):
     def _api(self, method, path, data=None):
         url = self._base_url + path
         if method == METHOD_GET:
-            return http_client.request('GET', url, timeout=self._timeout)
+            return http_client.request(
+                'GET', url, timeout=self._timeout, headers=self._headers)
         elif method == METHOD_POST:
-            return http_client.request('POST', url, json=data,
-                                       timeout=self._timeout)
+            return http_client.request(
+                'POST', url, json=data, timeout=self._timeout,
+                headers=self._headers)
