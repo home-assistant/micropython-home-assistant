@@ -20,6 +20,7 @@ Methods:
 
 .. code-block:: python
 
+    from homeassistant import HomeAssistant
     hass = HomeAssistant('http://127.0.0.1:8123', 'my_password')
     states = hass.states()
     state = states[0]
@@ -37,6 +38,19 @@ Methods:
     hass.fire_event('some_event', {'hello': 'world'})
 
     hass.call_service('switch', 'turn_on', {'entity_id': 'switch.ac'})
+
+Discovery
+---------
+
+It is able to automatically detect a running instance of Home Assistant on the network if the server is running the experimental ``discoverable`` component.
+
+By default the Home Assistant server will not expose it's password. In this case to get a working instance you have to pass a password to ``get_instance('my password')``.
+
+.. code-block:: python
+
+    from homeassistant.discovery import get_instance
+
+    hass = get_instance()
 
 Notes
 -----
