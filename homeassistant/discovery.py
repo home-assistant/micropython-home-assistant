@@ -22,8 +22,7 @@ def scan():
         if hasattr(sock, 'settimeout'):
             sock.settimeout(TIMEOUT)
 
-        addrs = usocket.getaddrinfo(MCAST_IP, MCAST_PORT, usocket.AF_INET,
-                                    usocket.SOCK_DGRAM)
+        addrs = usocket.getaddrinfo(MCAST_IP, MCAST_PORT)
         sock.sendto(QUERY, addrs[0][4])
         data, addr = sock.recvfrom(1024)
         return ujson.loads(data.decode('utf-8'))
